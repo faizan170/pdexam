@@ -1,0 +1,48 @@
+Get user all data
+---
+tags:
+  - User
+
+security:
+  - api_key: []
+
+responses:
+  400:
+    description: Bad Data Provided
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Invalid inputs
+  401:
+    description: Verification Error
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Verification failed
+  200:
+    description: Status Accept
+    schema:
+      properties:
+        status:
+          type: string
+          description: status string of response success
+        data:
+          type: object
+          desctiption: Data
+          properties:
+            name:
+              type: string
+              description: Person Name
+            email:
+              type: string
+              description: Person Email
+            create_datetime:
+              type: string
+              format: date-time
+              description: Account creation datetime
+            update_datetime:
+              type: string
+              format: date-time
+              description: Account information update datetime

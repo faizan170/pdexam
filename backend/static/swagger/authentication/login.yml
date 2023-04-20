@@ -1,0 +1,59 @@
+Login
+---
+tags:
+  - Auth
+definitions:
+  - schema:
+      id: Group
+      properties:
+        name:
+         type: string
+         description: the group's name
+parameters:
+  - in: body
+    name: body
+    schema:
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: faizan@gmail.com
+          description: A valid email for already registered user
+        password:
+          type: string
+          example: 1234!Abcd
+          description: Password used during registration
+          
+responses:
+  400:
+    description: Bad Data Provided
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Invalid inputs
+  401:
+    description: Verification Error
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Verification failed
+  200:
+    description: Status Accept
+    schema:
+      properties:
+        status:
+          type: string
+          description: status string of response success
+        userData:
+          type: string
+          desctiption: Data
+        accessToken:
+          type: string
+          description: Access JWT token
+        refreshToken:
+          type: string
+          description: Refresh JWT token

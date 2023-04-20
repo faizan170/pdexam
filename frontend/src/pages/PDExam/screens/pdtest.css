@@ -1,0 +1,26 @@
+.pdexam-header {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    height: 13vh;
+}
+
+.pdexam-title {
+    background-color: rgb(154, 217, 234);
+    font-weight: bold;
+    border: 1px solid #222;
+    font-size: 18px;
+}
+
+.pdexam-body {
+    height: 75vh;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 500px) {
+    .pdexam-body {
+      height: 70vh;
+    }
+  }

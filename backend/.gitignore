@@ -1,0 +1,9 @@
+**__pycache__/
+.env
+*data.db
+logs/
+*.docx
+*.pdf
+*.wav
+*.mp3
+static/temp

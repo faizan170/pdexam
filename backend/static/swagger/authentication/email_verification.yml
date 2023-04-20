@@ -1,0 +1,45 @@
+Email Verification
+---
+tags:
+  - Auth
+definitions:
+  - schema:
+      id: Group
+      properties:
+        name:
+         type: string
+         description: the group's name
+parameters:
+  - in: body
+    name: body
+    schema:
+      required:
+        - reset_id
+      properties:
+        verification_key:
+          type: string
+          example: f578fb6a916f48c68a57bd902df35ead
+          description: A valid reset id
+          
+responses:
+  400:
+    description: Bad Data Provided
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Invalid inputs
+  401:
+    description: Verification Error
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Verification failed
+  200:
+    description: Status Accept
+    schema:
+      properties:
+        message:
+          type: string
+          description: successfull
