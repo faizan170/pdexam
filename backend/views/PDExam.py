@@ -97,7 +97,7 @@ class PDExam(Resource):
                     
                 row['spectogram'] = spectograms
                 all_spectograms.append(row)
-                send_socket_resp(f"Creating Report: {round((ex_id / len(exam_ids)) * 100)}%")
+                send_socket_resp(f"{round((ex_id / len(exam_ids)) * 100)}%")
 
             final_data = {
                 'spectograms' : all_spectograms,

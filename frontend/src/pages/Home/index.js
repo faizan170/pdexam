@@ -52,7 +52,7 @@ export default function Home() {
         <Container maxWidth="sm">
             <div className="header text-center">
                 <div style={{ paddingTop: '20px' }}>
-                    <div className="pdexam-title" style={{ fontSize: '40px' }}>PDExam</div>
+                    <div className="pdexam-title-m">PDExam</div>
                     <img src={AudioWaveImg} style={{ height: '100px', width: '300px', marginTop: '10px' }} />
                 </div>
             </div>
