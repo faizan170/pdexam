@@ -19,8 +19,34 @@
     overflow-y: auto;
 }
 
+
+.countdown-container {
+    width: 80px; 
+    height: 80px; 
+    display: flex; 
+    margin: 0 auto; 
+    border-radius: 50%; 
+    background-color: rgb(122,122,122);
+    justify-content: center;
+    flex-direction: column; 
+    color: #fff
+}
+
+.countdown-text {
+    text-align: center;
+    font-size: 40px;
+}
+
+
+
 @media screen and (max-width: 500px) {
     .pdexam-body {
       height: 70vh;
+    }
+    .countdown-container {
+        width: 60px; height: 60px;
+    }
+    .countdown-text {
+        font-size: 32px;
     }
   }

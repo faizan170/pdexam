@@ -17,6 +17,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from src.utils.audio_utils import mp3_to_spectogram
 from src.utils.create_report import create_report
+from config import socket_app
 import shutil
 #from docx2pdf import convert
 import time
@@ -55,6 +56,10 @@ def generate_pdf(doc_path, path):
                  doc_path])
     return doc_path
 
+def send_socket_resp(resp):
+    socket_app.emit('processResponse', {
+            'data' : resp
+         })
 
 # Refresh Token
 class PDExam(Resource):
@@ -83,7 +88,7 @@ class PDExam(Resource):
             all_files = request.files
 
             all_spectograms = []
-            for row in exam_ids:
+            for ex_id, row in enumerate(exam_ids):
                 spectograms = {"left" : "", "right" : ""}
                 for key in ['right', 'left']:
                     file_id = f"{row['id']}-{key}"
@@ -92,16 +97,19 @@ class PDExam(Resource):
                     
                 row['spectogram'] = spectograms
                 all_spectograms.append(row)
+                send_socket_resp(f"Creating Report: {round((ex_id / len(exam_ids)) * 100)}%")
 
             final_data = {
                 'spectograms' : all_spectograms,
                 "fields" : fileds_data
             }
 
+            send_socket_resp("Creating report")
+
             resp = create_report(final_data)
             #convert(resp, "static/temp/report.pdf")
             #subprocess.run(['unoconv', '-f', 'pdf', resp])
-
+            send_socket_resp("Creating PDF")
             os.system(f"lowriter --headless --convert-to pdf {resp}")
             pdf_path = resp.replace(".docx", ".pdf")
             if os.path.exists(os.path.basename(pdf_path)):

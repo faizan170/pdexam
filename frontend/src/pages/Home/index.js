@@ -20,18 +20,22 @@ export default function Home() {
             <Container maxWidth="sm">
                 <div className="header text-center">
                     <div style={{ paddingTop: '20px' }}>
-                        <div className="pdexam-title">PDExam</div>
+                        <div className="pdexam-title-m">PDExam</div>
                         <img src={AudioWaveImg} style={{ height: '100px', width: '300px', marginTop: '10px' }} />
                     </div>
                 </div>
                 <div className="text-center main-body">
                     <div style={{ height: '100%', justifyContent: 'center', flexDirection: 'column', display: 'flex' }}>
-                        <div>
+                        <div className="welcome-container">
+
+                            {/* <h2 style={{ marginBottom: '20px' }}>Welcome Back <span className="text-primary">{user.fullname}</span></h2> */}
+                            <Link style={{ marginTop: '20px' }} to="/pd-exam" className="start-exam-btn">Start Exam</Link>
+                        </div>
+
+                        <div className="logout-container">
                             <h2 style={{ marginBottom: '20px' }}>Welcome Back <span className="text-primary">{user.fullname}</span></h2>
-                            <Button variant="contained" onClick={() => dispatch(handleLogout())} startIcon={<LogoutIcon/>}>Logout</Button>
-                            <div>
-                            <Button style={{ marginTop: '20px' }} variant="contained" component={Link} to="/pd-exam" color="secondary">Start Exam</Button>
-                            </div></div>
+                            <Button variant="contained" onClick={() => dispatch(handleLogout())} startIcon={<LogoutIcon />}>Logout</Button>
+                        </div>
                     </div>
                 </div>
                 <div className="main-footer">
@@ -47,10 +51,10 @@ export default function Home() {
     return (
         <Container maxWidth="sm">
             <div className="header text-center">
-            <div style={{ paddingTop: '20px' }}>
-                        <div className="pdexam-title" style={{ fontSize: '40px' }}>PDExam</div>
-                        <img src={AudioWaveImg} style={{ height: '100px', width: '300px', marginTop: '10px' }} />
-                    </div>
+                <div style={{ paddingTop: '20px' }}>
+                    <div className="pdexam-title" style={{ fontSize: '40px' }}>PDExam</div>
+                    <img src={AudioWaveImg} style={{ height: '100px', width: '300px', marginTop: '10px' }} />
+                </div>
             </div>
             <div className="text-center main-body">
                 <div style={{ height: '100%', justifyContent: 'center', flexDirection: 'column', display: 'flex' }}>

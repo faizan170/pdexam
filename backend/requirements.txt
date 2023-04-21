@@ -10,3 +10,7 @@ matplotlib==3.6.2
 librosa
 numpy
 boto3
+python-socketio==5.7.2
+python-engineio==4.3.4
+python-dotenv
+flask-socketio

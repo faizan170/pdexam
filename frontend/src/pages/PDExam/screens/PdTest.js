@@ -59,7 +59,7 @@ export default function PDTest() {
         console.log("finish")
         setAudioURL({ ...audioURL, [recordState.recordType]: URL.createObjectURL(blob) });
         dispatch(setTestRecording({ id: test_data[current_test_index].id, type: recordState.recordType, data: blob }))
-        
+
         setRecordState({ type: '', state: 'idle' })
         //setAudioUrl([...audioURL, URL.createObjectURL(blob)])
     };
@@ -100,27 +100,36 @@ export default function PDTest() {
     }
 
     const get_button_text = (type) => {
-        console.log(recordState)
+        //console.log(recordState)
         if (type === 'right') {
             if (recordState.recordType === 'right') {
                 if (recordState.state === 'countdown') {
-                    return `Starting In ${countDown}`
+                    return `Preparing to Record`
                 } else if (recordState.state === 'recording') {
-                    return `Recording ${recordingTime}`
+                    return `Recording Now`
                 }
             } else {
                 return `Record Right ${test_data[current_test_index].type}`
             }
         } else if (type === 'left') {
+            
             if (recordState.recordType === 'left') {
                 if (recordState.state === 'countdown') {
-                    return `Starting In ${countDown}`
+                    return `Preparing to Record`
                 } else if (recordState.state === 'recording') {
-                    return `Recording ${recordingTime}`
+                    return `Recording Now`
                 }
             } else {
                 return `Record Left ${test_data[current_test_index].type}`
             }
+        }
+    }
+
+    const counter = () => {
+        if (recordState.state === 'countdown') {
+            return `${countDown}`
+        } else if (recordState.state === 'recording') {
+            return `${recordingTime}`
         }
     }
 
@@ -131,12 +140,12 @@ export default function PDTest() {
                 <div className="pdexam-title">Test {current_test_index + 1} - {test_data[current_test_index].title}</div>
             </div>
             <div className="pdexam-body">
-                
-                    <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '2px' }} className="text-center">
-                        <h2 style={{ marginTop: '0px' }}>Instructions</h2>
-                        <OndemandVideoIcon sx={{ fontSize: 80, cursor: 'pointer' }} color="primary" onClick={() =>setModalOpen(true)} />
-                    </div>
-                    <div style={{ height: '100%', justifyContent: 'center', flexDirection: 'column', display: 'flex' }}>
+
+                <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '2px' }} className="text-center">
+                    <h2 style={{ marginTop: '0px' }}>Instructions</h2>
+                    <OndemandVideoIcon sx={{ fontSize: 80, cursor: 'pointer' }} color="primary" onClick={() => setModalOpen(true)} />
+                </div>
+                <div style={{ height: '100%', justifyContent: 'center', flexDirection: 'column', display: 'flex' }}>
                     <div className="text-center">
 
                         <div style={{ visibility: 'hidden', position: 'fixed' }}>
@@ -145,10 +154,17 @@ export default function PDTest() {
 
 
                         <div style={{ padding: '10px' }} >
+
+                            { ['countdown', 'recording'].includes(recordState.state) && recordState.recordType === 'right' &&
+                                <div className="countdown-container">
+                                    <div className="countdown-text">{ counter() }</div>
+                                </div>
+                            }
+
                             {audioURL.right && <audio src={audioURL.right} controls />}
                             <Button variant="contained"
-                                startIcon={<MicIcon/>}
-                                style={{  margin: '10px auto' }}
+                                startIcon={<MicIcon />}
+                                style={{ margin: '10px auto', minWidth: '200px' }}
                                 onClick={() => handleStartRecording('right')}
                                 disabled={isRecording || recordState.state === 'countdown'}>
                                 {get_button_text('right')}
@@ -157,9 +173,14 @@ export default function PDTest() {
 
                         </div>
                         <div style={{ padding: '10px' }} >
+                        { ['countdown', 'recording'].includes(recordState.state) && recordState.recordType === 'left' &&
+                                <div className="countdown-container">
+                                    <div className="countdown-text">{ counter() }</div>
+                                </div>
+                            }
                             {audioURL.left && <audio src={audioURL.left} controls />}
                             <Button variant="contained" color="primary"
-                                startIcon={<MicIcon/>}
+                                startIcon={<MicIcon />}
                                 disabled={isRecording || recordState.state === 'countdown'}
                                 style={{ margin: '10px auto' }}
                                 onClick={() => handleStartRecording('left')}>
@@ -173,7 +194,7 @@ export default function PDTest() {
             <div className="pdexam-footer">
                 <div style={{ display: 'flex', justifyContent: 'flex-start', flexDirection: 'column', height: '100%' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', margin: '5px' }}>
-                        <Button variant="contained" 
+                        <Button variant="contained"
                             startIcon={<KeyboardArrowLeftIcon />}
                             disabled={current_test_index === 0}
                             onClick={() => dispatch(setCurrentIndex(formData.current_test_index - 1))}>Previous</Button>
