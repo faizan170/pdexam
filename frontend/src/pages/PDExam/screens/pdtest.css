@@ -37,11 +37,18 @@
     font-size: 35px;
 }
 
+.pdexam-instruction-container {
+    border: 1px solid #ccc; padding: 20px; border-radius: 2px
+}
+
 
 
 @media screen and (max-width: 500px) {
+    .pdexam-instruction-container {
+        padding: 10px;
+    }
     .pdexam-body {
-      height: 70vh;
+      height: 61vh;
     }
     .countdown-container {
         width: 45px; height: 45px;

@@ -136,7 +136,7 @@ export default function PDTest() {
             </div>
             <div className="pdexam-body">
 
-                <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '2px' }} className="text-center">
+                <div className="text-center pdexam-instruction-container">
                     <h2 style={{ marginTop: '0px' }}>Instructions</h2>
                     <OndemandVideoIcon sx={{ fontSize: 80, cursor: 'pointer' }} color="primary" onClick={() => setModalOpen(true)} />
                 </div>

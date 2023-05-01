@@ -158,7 +158,7 @@ export default function SubmitTest() {
                                     startIcon={<ShareIcon />}
                                     onClick={handleShareClick}
                                     variant="contained" color='secondary'>
-                                    Share
+                                    Share Email
                                 </Button>
 
                                 <div style={{
@@ -197,7 +197,7 @@ export default function SubmitTest() {
                 <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', height: '100%' }}>
 
                     <div>
-                        <Button disabled={isSubmitting} variant="contained" onClick={() => dispatch(setCurrentScreen('test'))}>Previous</Button>
+                        <Button disabled={isSubmitting} variant="contained" onClick={() => dispatch(setCurrentScreen('test'))}>Reassert to Test</Button>
 
                     </div>
                 </div>

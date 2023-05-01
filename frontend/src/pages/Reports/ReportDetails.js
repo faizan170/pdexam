@@ -35,6 +35,7 @@ export default function ReportDetails() {
     const get_reports_data = () => {
         setIsLoading(true)
         instance.get(`${API_URL}/pdexam?report_id=${match.id}`).then(res => {
+            console.log(res.data)
             setReportsData(res.data)
             setIsLoading(false)
         }).catch(err => {
@@ -68,71 +69,77 @@ export default function ReportDetails() {
                         <div style={{ textAlign: 'center' }}><img src={LoadingIcon} /></div>
                     </div>
                     :
-                    <Card>
-                        <CardHeader
-                        avatar={
-                            <Avatar onClick={() => navigate("/reports")} style={{ cursor: 'pointer' }}>
-                              <KeyboardArrowLeftIcon />
-                            </Avatar>
-                          }
-                            title={reportsData._id}
-                            subheader={reportsData.created_at}
-                        />
-                        <CardContent>
-                            <div>
-                                <Button style={{ marginTop: '5px', marginRight: '5px' }}
-                                    startIcon={<DownloadIcon />}
-                                    href={reportsData.url} variant="contained" color='success' download target="_blank">
-                                    Download Report
-                                </Button>
-                                <Button style={{ marginTop: '5px' }}
-                                    startIcon={<ShareIcon />}
-                                    onClick={handleShareClick}
-                                    variant="contained" color='secondary'>
-                                    Share
-                                </Button>
+                    (
+                        Object.keys(reportsData).length === 0 ?
+                            <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', height: '50vh' }}>
+                                <div style={{ textAlign: 'center' }}>No Data found</div>
                             </div>
-                            <div style={{ marginTop: '10px' }}>
-                                <Typography variant="h6" color='primary' style={{ marginTop: '5px', marginBottom: '5px' }}>
-                                    Audio Files ({reportsData.audio.length})
-                                </Typography>
+                            :
+                            <Card>
+                                <CardHeader
+                                    avatar={
+                                        <Avatar onClick={() => navigate("/reports")} style={{ cursor: 'pointer' }}>
+                                            <KeyboardArrowLeftIcon />
+                                        </Avatar>
+                                    }
+                                    title={reportsData._id}
+                                    subheader={reportsData.created_at}
+                                />
+                                <CardContent>
+                                    <div>
+                                        <Button style={{ marginTop: '5px', marginRight: '5px' }}
+                                            startIcon={<DownloadIcon />}
+                                            href={reportsData.url} variant="contained" color='success' download target="_blank">
+                                            Download Report
+                                        </Button>
+                                        <Button style={{ marginTop: '5px' }}
+                                            startIcon={<ShareIcon />}
+                                            onClick={handleShareClick}
+                                            variant="contained" color='secondary'>
+                                            Share
+                                        </Button>
+                                    </div>
+                                    <div style={{ marginTop: '10px' }}>
+                                        <Typography variant="h6" color='primary' style={{ marginTop: '5px', marginBottom: '5px' }}>
+                                            Audio Files ({reportsData.audio?.length})
+                                        </Typography>
 
-                                {
-                                    reportsData.audio.map((audio_pair, audio_index) => {
-                                        return (
-                                            <Grid key={`pair-${audio_index}`} container spacing={2} style={{ marginBottom: '10px', }}>
-                                                <Grid item sm={6} sx={12}>
-                                                    <Card style={{ display: 'flex', minWidth: '260px', justifyContent: 'space-between', padding: '10px', border: '1px solid #ccc' }}>
-                                                        <div style={{ display: 'flex' }}>
-                                                            <AudioFileIcon color="secondary" />
-                                                            <div style={{ color: "#444" }}>
-                                                                {audio_pair.left.split("/").pop()}
-                                                            </div>
-                                                        </div>
-                                                        <a href={ audio_pair.left } download target="_blank"><DownloadIcon color="primary" /></a>
-                                                    </Card>
-                                                </Grid>
-                                                <Grid item sm={6} sx={12}>
-                                                    <Card style={{ display: 'flex', minWidth: '260px', justifyContent: 'space-between', padding: '10px', border: '1px solid #ccc' }}>
-                                                        <div style={{ display: 'flex' }}>
-                                                            <AudioFileIcon color="secondary" />
-                                                            <div style={{ color: "#444" }}>
-                                                                {audio_pair.right.split("/").pop()}
-                                                            </div>
-                                                        </div>
-                                                        <a href={ audio_pair.right } download target="_blank"><DownloadIcon color="primary" /></a>
-                                                    </Card>
-                                                </Grid>
-                                            </Grid>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </CardContent>
-                    </Card>
+                                        {
+                                            reportsData.audio.map((audio_pair, audio_index) => {
+                                                return (
+                                                    <Grid key={`pair-${audio_index}`} container spacing={2} style={{ marginBottom: '10px', }}>
+                                                        <Grid item sm={6} sx={12}>
+                                                            <Card style={{ display: 'flex', minWidth: '260px', justifyContent: 'space-between', padding: '10px', border: '1px solid #ccc' }}>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <AudioFileIcon color="secondary" />
+                                                                    <div style={{ color: "#444" }}>
+                                                                        {audio_pair.left.split("/").pop()}
+                                                                    </div>
+                                                                </div>
+                                                                <a href={audio_pair.left} download target="_blank"><DownloadIcon color="primary" /></a>
+                                                            </Card>
+                                                        </Grid>
+                                                        <Grid item sm={6} sx={12}>
+                                                            <Card style={{ display: 'flex', minWidth: '260px', justifyContent: 'space-between', padding: '10px', border: '1px solid #ccc' }}>
+                                                                <div style={{ display: 'flex' }}>
+                                                                    <AudioFileIcon color="secondary" />
+                                                                    <div style={{ color: "#444" }}>
+                                                                        {audio_pair.right.split("/").pop()}
+                                                                    </div>
+                                                                </div>
+                                                                <a href={audio_pair.right} download target="_blank"><DownloadIcon color="primary" /></a>
+                                                            </Card>
+                                                        </Grid>
+                                                    </Grid>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </CardContent>
+                            </Card>
 
 
-
+                    )
             }
 
         </Container>
