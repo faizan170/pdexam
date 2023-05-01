@@ -9,9 +9,10 @@ import os
 
 
 def mp3_to_spectogram(file, file_id):
-    file.save("test.mp3")
+    
     # Load the audio file
-    audio_path = 'test.mp3'
+    audio_path = f'static/temp/{file_id}.mp3'
+    file.save(audio_path)
     y, sr = librosa.load(audio_path)
 
     # Compute the spectrogram
@@ -35,6 +36,4 @@ def mp3_to_spectogram(file, file_id):
     filepath = f'static/temp/{file_id}.jpg'
     plt.savefig(filepath, bbox_inches='tight')
 
-    os.remove("test.mp3")
-
-    return filepath
+    return filepath, audio_path

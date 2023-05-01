@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleLogout } from './redux/authentication';
 import { setUser } from './redux/user';
 import instance from './auth/jwt/useJwt';
+import Reports from './pages/Reports';
+import ReportDetails from './pages/Reports/ReportDetails';
 
 
 function App() {
@@ -61,6 +63,8 @@ function App() {
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route path='/pd-exam' element={<PDExam />} />
+          <Route path='/reports' element={<Reports />} />
+          <Route path='/reports/:id' element={<ReportDetails />} />
         </Route> 
 
         <Route path='/' element={<HomePage />} />

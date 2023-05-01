@@ -1,6 +1,6 @@
 .pdexam-header {
     padding-bottom: 10px;
-    padding-top: 10px;
+    padding-top: 5px;
     height: 13vh;
 }
 
@@ -21,8 +21,8 @@
 
 
 .countdown-container {
-    width: 80px; 
-    height: 80px; 
+    width: 70px; 
+    height: 70px; 
     display: flex; 
     margin: 0 auto; 
     border-radius: 50%; 
@@ -34,7 +34,7 @@
 
 .countdown-text {
     text-align: center;
-    font-size: 40px;
+    font-size: 35px;
 }
 
 
@@ -44,9 +44,9 @@
       height: 70vh;
     }
     .countdown-container {
-        width: 60px; height: 60px;
+        width: 45px; height: 45px;
     }
     .countdown-text {
-        font-size: 32px;
+        font-size: 30px;
     }
   }

@@ -10,6 +10,7 @@ from bson.objectid import ObjectId
 
 from src.utils.logger import error_logger, info_logger
 import os
+from src.database.Reports import create_report as add_new_report, get_all_reports_for_user, delete_report_by_id, get_single_report
 from config import app, s3Manager
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import create_refresh_token, verify_jwt_in_request
@@ -65,14 +66,8 @@ def send_socket_resp(resp):
 class PDExam(Resource):
     @jwt_required()
     def post(self):
-        """ 
-        Refresh Token API
-        ---
-        swagger_from_file: static/swagger/user/data.yml
-        """
-        
         identity = get_jwt_identity()
-        try:
+        if 1==1:
             st = time.time()
             form_data = dict(request.form)
             fileds_data = {
@@ -86,14 +81,22 @@ class PDExam(Resource):
 
             
             all_files = request.files
+            audio_files = []
 
             all_spectograms = []
             for ex_id, row in enumerate(exam_ids):
                 spectograms = {"left" : "", "right" : ""}
+                audio_file_s = {"left" : "", "right" : ""}
                 for key in ['right', 'left']:
                     file_id = f"{row['id']}-{key}"
                     if file_id in all_files:
-                        spectograms[key] = mp3_to_spectogram(all_files[file_id], file_id)
+                        
+                        spect, audio_path = mp3_to_spectogram(all_files[file_id], file_id)
+                        spectograms[key] = spect
+                        
+                        audio_file_s[key] = audio_path
+
+                audio_files.append(audio_file_s)
                     
                 row['spectogram'] = spectograms
                 all_spectograms.append(row)
@@ -122,9 +125,88 @@ class PDExam(Resource):
             #file = request.files['arm_at_rest-right']
             #file.save("test.mp3")
 
+            
+            send_socket_resp("Storing Data")
+
+            final_audio_data = []
+            report_id = os.path.basename(resp).split(".")[0]
+            for single_audio_pair in audio_files:
+                single_final_audio_data = {'left' : "", 'right' : ""}
+                for audio_key, audio_path in single_audio_pair.items():
+                    if audio_path != "":
+                        single_final_audio_data[audio_key] = s3Manager.upload_file(audio_path, f"audio/{identity}/{report_id}/{os.path.basename(audio_path)}")
+                        os.remove(audio_path)
+                final_audio_data.append(single_final_audio_data)
+
+            add_new_report({
+                'test_performance' : test_performance.get(form_data.get("assist", ""), ""), 
+                'medication_status' : medication_status.get(form_data.get("medication", ""), ""), 
+                "rating_of_symptoms" : form_data.get("symptoms", ""),
+                'filename' : os.path.basename(resp),
+                'audio' : final_audio_data,
+                'url' : public_url,
+                'user_id' : ObjectId(identity)
+            })
+
+
             return make_response(jsonify({
                 "status" : "success",
                 "url" : public_url
             }), 200)
+        #except Exception as ex:
+        #    return make_response(str(ex), 400)
+        
+    @jwt_required()
+    def get(self):
+        """ 
+        Get all reports
+        ---
+        swagger_from_file: static/swagger/reports/all.yml
+        """
+        try:
+            identity = get_jwt_identity()
+            report_id = request.args.get("report_id")
+            if report_id:
+                report_data = get_single_report(report_id)
+                report_data['_id'] = str(report_data['_id'])
+                report_data['user_id'] = str(report_data['user_id'])
+
+                return make_response(jsonify(report_data), 200)
+
+
+
+            reports = []
+            for report in get_all_reports_for_user(ObjectId(identity)):
+                report['_id'] = str(report['_id'])
+                report['user_id'] = str(report['user_id'])
+
+                reports.append(report)
+
+
+            return make_response(jsonify(reports), 200)
         except Exception as ex:
+            return make_response(str(ex), 400)
+        
+
+    @jwt_required()
+    def delete(self):
+        """ 
+        Delete a report
+        ---
+        swagger_from_file: static/swagger/reports/delete.yml
+        """
+        try:
+            identity = get_jwt_identity()
+            print(request.get_json())
+            report_id = request.get_json().get("report_id")
+
+            status, report = delete_report_by_id(report_id)
+
+            s3Manager.delete_file(f"reports/{identity}/" + report['filename'])
+            #s3Manager.delete_folder(f"audio/{identity}/{report_id}")
+
+
+            return make_response(jsonify({"status" : "success"}), 200)
+        except Exception as ex:
+            print(ex)
             return make_response(str(ex), 400)

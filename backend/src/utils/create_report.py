@@ -30,6 +30,7 @@ def set_cell_margins(cell, **kwargs):
 
 
 def create_report(report_data):
+    print(report_data)
     # create document
     doc = Document()
 

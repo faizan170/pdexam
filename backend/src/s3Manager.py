@@ -25,3 +25,11 @@ class S3Manager():
         body = obj.get()['Body'].read()
 
         return json.loads(body)
+    
+    def delete_folder(self, path):
+        objects_to_delete = self.s3.meta.client.list_objects(Bucket=self.bucket_name, Prefix=path)
+
+        delete_keys = {'Objects' : []}
+        delete_keys['Objects'] = [{'Key' : k} for k in [obj['Key'] for obj in objects_to_delete.get('Contents', [])]]
+
+        self.s3.meta.client.delete_objects(Bucket=self.bucket_name, Delete=delete_keys)

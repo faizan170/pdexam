@@ -1,0 +1,32 @@
+Get all reports for current user
+---
+tags:
+  - Report
+
+security:
+  - api_key: []
+
+responses:
+  400:
+    description: Bad Data Provided
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Invalid inputs
+  401:
+    description: Verification Error
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Verification failed
+  200:
+    description: Status Accept
+    schema:
+      properties:
+        status:
+          type: string
+          description: status string of response success
+        data:
+          type: array

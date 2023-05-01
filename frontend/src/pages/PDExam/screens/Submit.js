@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFormData, setCurrentScreen, setCurrentIndex, setTestRecording } from "../../../redux/pdexam";
 
 import './initialScreen.css'
-import axios from "axios";
 
 import Tooltip from '@mui/material/Tooltip';
 import io from 'socket.io-client';
 import { API_URL } from "../../../configs/endpoint";
-
+import DownloadIcon from '@mui/icons-material/Download'
+import ShareIcon from '@mui/icons-material/Share'
 
 import instance from '../../../auth/jwt/useJwt';
 import ProgressWithLabel from "./utils/ProgressBar";
@@ -94,6 +94,8 @@ export default function SubmitTest() {
                 //}
                 if (data.data.includes('%')) {
                     setDataPercentage(parseInt(data.data.replace("%", "")))
+                }else{
+                    setDataPercentage(100)
                 }
                 setSocketResp(data.data)
             })
@@ -117,6 +119,11 @@ export default function SubmitTest() {
         setTooltipOpen(true);
     };
 
+    function handleShareClick() {
+        const emailLink = `mailto:?body=${encodeURIComponent(respUrl)}`;
+        window.location.href = emailLink;
+      }
+
 
 
     return (
@@ -126,7 +133,7 @@ export default function SubmitTest() {
             </div>
             <div className="pdexam-body">
                 <h1 className="text-center">You have completed all tasks</h1>
-                <div className="text-center">
+                <div className="text-center" style={{ overflowX: 'hidden' }}>
                     {respUrl === "" &&
                         <Button disabled={isSubmitting} variant="contained" color="success" onClick={onSubmitClick}>
                             {isSubmitting ? (socketResp === "" ? 'Creating Report' : socketResp) : 'Press to Submit'}
@@ -142,8 +149,16 @@ export default function SubmitTest() {
                     <div>
                         {respUrl !== "" &&
                             <div>
-                                <Button href={respUrl} variant="contained" color='secondary' download target="_blank">
+                                <Button 
+                                    startIcon={<DownloadIcon />}
+                                    href={respUrl} variant="contained" color='success' download target="_blank">
                                     Download Report
+                                </Button>
+                                <Button style={{ marginLeft: '5px' }} 
+                                    startIcon={<ShareIcon />}
+                                    onClick={handleShareClick}
+                                    variant="contained" color='secondary'>
+                                    Share
                                 </Button>
 
                                 <div style={{

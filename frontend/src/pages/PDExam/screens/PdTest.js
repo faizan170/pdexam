@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Container } from '@mui/material'
 import { useDispatch, useSelector } from "react-redux";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { setFormData, setCurrentScreen, setCurrentIndex, setTestRecording } from "../../../redux/pdexam";
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
@@ -15,6 +11,7 @@ import './pdtest.css'
 import VideoDialog from "./utils/VideoDialog";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import LinearProgress from '@mui/material/LinearProgress';
 
 export default function PDTest() {
     const dispatch = useDispatch()
@@ -38,9 +35,6 @@ export default function PDTest() {
         left: '', right: ''
     });
 
-    let mediaRecorder;
-    let mediaStream;
-    let chunks = [];
 
     useEffect(() => {
         var leftUrl = ''
@@ -136,6 +130,7 @@ export default function PDTest() {
 
     return (
         <Container maxWidth="sm">
+            <LinearProgress variant="determinate" style={{ marginTop: '3px' }} value={(current_test_index/10)*100} />
             <div className="pdexam-header text-center">
                 <div className="pdexam-title">Test {current_test_index + 1} - {test_data[current_test_index].title}</div>
             </div>
@@ -156,7 +151,7 @@ export default function PDTest() {
                         <div style={{ padding: '10px' }} >
 
                             { ['countdown', 'recording'].includes(recordState.state) && recordState.recordType === 'right' &&
-                                <div className="countdown-container">
+                                <div className="countdown-container" style={{ backgroundColor: isRecording && '#07F' }}>
                                     <div className="countdown-text">{ counter() }</div>
                                 </div>
                             }
@@ -166,7 +161,7 @@ export default function PDTest() {
                                 startIcon={<MicIcon />}
                                 style={{ margin: '10px auto', minWidth: '200px' }}
                                 onClick={() => handleStartRecording('right')}
-                                disabled={isRecording || recordState.state === 'countdown'}>
+                                disabled={['countdown', 'recording'].includes(recordState.state)}>
                                 {get_button_text('right')}
 
                             </Button>
@@ -174,14 +169,14 @@ export default function PDTest() {
                         </div>
                         <div style={{ padding: '10px' }} >
                         { ['countdown', 'recording'].includes(recordState.state) && recordState.recordType === 'left' &&
-                                <div className="countdown-container">
+                                <div className="countdown-container" style={{ backgroundColor: isRecording && '#07F' }}>
                                     <div className="countdown-text">{ counter() }</div>
                                 </div>
                             }
                             {audioURL.left && <audio src={audioURL.left} controls />}
                             <Button variant="contained" color="primary"
                                 startIcon={<MicIcon />}
-                                disabled={isRecording || recordState.state === 'countdown'}
+                                disabled={['countdown', 'recording'].includes(recordState.state)}
                                 style={{ margin: '10px auto' }}
                                 onClick={() => handleStartRecording('left')}>
                                 {/* Record Left {test_data[current_test_index].type} */}
@@ -199,7 +194,7 @@ export default function PDTest() {
                             disabled={current_test_index === 0}
                             onClick={() => dispatch(setCurrentIndex(formData.current_test_index - 1))}>Previous</Button>
 
-                        <Button variant="contained" onClick={onNextClick} endIcon={<KeyboardArrowRightIcon />}>Next</Button>
+                        <Button variant="contained" onClick={onNextClick} disabled={isRecording} endIcon={<KeyboardArrowRightIcon />}>Next</Button>
                     </div>
                 </div>
                 <VideoDialog open={modalOpen} setOpen={() => setModalOpen(false)} />

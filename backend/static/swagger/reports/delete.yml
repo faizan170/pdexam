@@ -1,0 +1,42 @@
+Delete report
+---
+tags:
+  - Report
+
+security:
+  - api_key: []
+
+parameters:
+  - in: body
+    name: body
+    schema:
+      required:
+        - report_id
+      properties:
+        report_id:
+          type: string
+          example: a12s34ibcd
+          description: Report id
+          
+responses:
+  400:
+    description: Bad Data Provided
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Invalid inputs
+  401:
+    description: Verification Error
+    schema:
+      properties:
+        message:
+          type: string
+          desctiption: Verification failed
+  200:
+    description: Status Accept
+    schema:
+      properties:
+        message:
+          type: string
+          description: Report deleted
