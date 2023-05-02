@@ -39,7 +39,8 @@ class UserData(Resource):
                 "username" : user['username'],
                 "id" : identity,
                 "email" : user['email'],
-                "created_at" : user['created_at'].strftime("%Y-%m-%d %H:%M:%S")
+                "created_at" : user['created_at'].strftime("%Y-%m-%d %H:%M:%S"),
+                'role' : user['role']
             }
         }), 200)
 

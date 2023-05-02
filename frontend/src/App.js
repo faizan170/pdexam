@@ -19,6 +19,8 @@ import { setUser } from './redux/user';
 import instance from './auth/jwt/useJwt';
 import Reports from './pages/Reports';
 import ReportDetails from './pages/Reports/ReportDetails';
+import AdminPage from './pages/Admin';
+import AdminReportDetails from './pages/Admin/AdminReportDetails';
 
 
 function App() {
@@ -65,6 +67,8 @@ function App() {
           <Route path='/pd-exam' element={<PDExam />} />
           <Route path='/reports' element={<Reports />} />
           <Route path='/reports/:id' element={<ReportDetails />} />
+          <Route path='/admin' element={<AdminPage />} />
+          <Route path='/admin/report/:id' element={<AdminReportDetails />} />
         </Route> 
 
         <Route path='/' element={<HomePage />} />

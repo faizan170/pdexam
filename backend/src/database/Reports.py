@@ -41,3 +41,34 @@ def delete_report_by_id(report_id):
 def get_single_report(report_id):
     report = reports_col.find_one({"_id" : ObjectId(report_id)})
     return report
+
+def get_all_reports():
+    # perform a join between the collections using the aggregate function
+    pipeline = [
+        {
+            "$lookup": {
+                "from": "users",
+                "localField": "user_id",
+                "foreignField": "_id",
+                "as": "user"
+            }
+        },
+        {
+            "$unwind": "$user"
+        },
+        {
+            "$project": {
+                "_id": 1,
+                "user_id": 1,
+                "full_name": "$user.full_name",
+                "email": "$user.email",
+                "url": 1,
+                'filename' : 1,
+                'created_at' : 1
+            }
+        }
+    ]
+
+    # execute the pipeline and get all reports with corresponding user's full name and email
+    all_reports_with_user_data = list(reports_col.aggregate(pipeline))
+    return all_reports_with_user_data

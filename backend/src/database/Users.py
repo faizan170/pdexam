@@ -37,7 +37,8 @@ def create_user(email, password, full_name, status="pending"):
             'full_name' : full_name, "email" : email, "password" : generate_password_hash(password),
             "status": status, "username" : username,
             "created_at" : datetime.now(),
-            "updated_at" : datetime.now()
+            "updated_at" : datetime.now(),
+            "role" : "user"
         })
         return result.inserted_id
 
@@ -75,3 +76,31 @@ def check_user_existance(email, password):
         return None
     except Exception as err:
         return None
+    
+
+
+def get_all_users():
+    pipeline = [
+        {
+            "$lookup": {
+                "from": "reports",
+                "localField": "_id",
+                "foreignField": "user_id",
+                "as": "reports"
+            }
+        },
+        {
+            "$project": {
+                "_id": 1,
+                "full_name": 1,
+                "email": 1,
+                "status": 1,
+                "created_at": 1,
+                "report_count": {"$size": "$reports"}
+            }
+        }
+    ]
+
+    # execute the pipeline and get all users with report count
+    all_users_with_report_count = list(users_col.aggregate(pipeline))
+    return all_users_with_report_count

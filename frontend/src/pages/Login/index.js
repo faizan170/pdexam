@@ -58,7 +58,8 @@ export default function SignIn() {
         dispatch(setUser({
           id: res.data.id,
           full_name: res.data.fullName,
-          username: res.data.username
+          username: res.data.username,
+          role: res.data.role
         }))
         //ability.update(res.data.userData.ability)
         navigate("/")

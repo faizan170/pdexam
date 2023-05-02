@@ -31,8 +31,15 @@ export default function Home() {
                             {/* <h2 style={{ marginBottom: '20px' }}>Welcome Back <span className="text-primary">{user.fullname}</span></h2> */}
                             <Link style={{ marginTop: '20px' }} to="/pd-exam" className="start-exam-btn">Start Exam</Link>
                             <div>
-                            <Link style={{ marginTop: '20px' }} to="/reports" className="history-btn">History</Link></div>
+                                <Link style={{ marginTop: '20px' }} to="/reports" className="history-btn">History</Link>
+
+                            {user.role === 'admin' &&
+
+                                <Link style={{ marginTop: '20px' }} to="/admin" className="admin-btn">Admin</Link>
+                            }
+                            </div>
                         </div>
+
 
                         <div className="logout-container">
                             <h2 style={{ marginBottom: '20px' }}>Welcome Back <span className="text-primary">{user.fullname}</span></h2>
