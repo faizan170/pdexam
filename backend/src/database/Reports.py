@@ -71,4 +71,33 @@ def get_all_reports():
 
     # execute the pipeline and get all reports with corresponding user's full name and email
     all_reports_with_user_data = list(reports_col.aggregate(pipeline))
-    return all_reports_with_user_data
+
+    pipeline = [
+        {
+            "$lookup": {
+                "from": "pins",
+                "localField": "pin_id",
+                "foreignField": "pin_id",
+                "as": "pin_info"
+            }
+        },
+        {
+            "$unwind": "$pin_info"
+        },
+        {
+            "$project": {
+                "_id": 1,
+                "user_id": None,
+                "full_name": "$pin_info.name",
+                "url": 1,
+                'filename' : 1,
+                'created_at' : 1
+            }
+        }
+    ]
+
+    # execute the pipeline and get all reports with corresponding user's full name and email
+    all_reports_with_pin_data = list(reports_col.aggregate(pipeline))
+
+
+    return all_reports_with_user_data + all_reports_with_pin_data

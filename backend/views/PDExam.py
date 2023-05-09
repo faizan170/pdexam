@@ -14,12 +14,13 @@ from src.database.Reports import create_report as add_new_report, get_all_report
 from config import app, s3Manager
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import create_refresh_token, verify_jwt_in_request
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, decode_token
 from flask_jwt_extended import jwt_required
 from src.utils.audio_utils import mp3_to_spectogram
 from src.utils.create_report import create_report
 from config import socket_app
 import shutil
+import jwt
 #from docx2pdf import convert
 import time
 
@@ -64,9 +65,23 @@ def send_socket_resp(resp):
 
 # Refresh Token
 class PDExam(Resource):
-    @jwt_required()
+    #@jwt_required()
     def post(self):
-        identity = get_jwt_identity()
+        #identity = get_jwt_identity()
+        identity = ""
+        pin_id = None
+        token = request.headers.get("Authorization")
+        if token is not None:
+            token = token.split(" ")[1]
+            print(token)
+            identity = decode_token(token).get("sub")
+        elif request.form.get("pin_id") not in ["null", None, ""]:
+            identity = request.form.get("pin_id")
+            pin_id = request.form.get("pin_id")
+        
+        if identity == "":
+            return jsonify("Unauthorized User", 401)
+        
         if 1==1:
             st = time.time()
             form_data = dict(request.form)
@@ -145,7 +160,8 @@ class PDExam(Resource):
                 'filename' : os.path.basename(resp),
                 'audio' : final_audio_data,
                 'url' : public_url,
-                'user_id' : ObjectId(identity)
+                'pin_id' : pin_id,
+                'user_id' : ObjectId(identity) if pin_id == None else None
             })
 
 

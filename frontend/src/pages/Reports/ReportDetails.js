@@ -99,7 +99,7 @@ export default function ReportDetails() {
                                             Share
                                         </Button>
                                     </div>
-                                    <div style={{ marginTop: '10px' }}>
+                                    {/* <div style={{ marginTop: '10px' }}>
                                         <Typography variant="h6" color='primary' style={{ marginTop: '5px', marginBottom: '5px' }}>
                                             Audio Files ({reportsData.audio?.length})
                                         </Typography>
@@ -134,7 +134,7 @@ export default function ReportDetails() {
                                                 )
                                             })
                                         }
-                                    </div>
+                                    </div> */}
                                 </CardContent>
                             </Card>
 

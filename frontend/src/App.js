@@ -21,6 +21,7 @@ import Reports from './pages/Reports';
 import ReportDetails from './pages/Reports/ReportDetails';
 import AdminPage from './pages/Admin';
 import AdminReportDetails from './pages/Admin/AdminReportDetails';
+import PinPage from './pages/PinPage';
 
 
 function App() {
@@ -64,14 +65,15 @@ function App() {
     <Router>
       <Routes>
         <Route element={<PrivateRoute />}>
-          <Route path='/pd-exam' element={<PDExam />} />
           <Route path='/reports' element={<Reports />} />
           <Route path='/reports/:id' element={<ReportDetails />} />
           <Route path='/admin' element={<AdminPage />} />
           <Route path='/admin/report/:id' element={<AdminReportDetails />} />
         </Route> 
-
+        
+        <Route path='/pd-exam' element={<PDExam />} />
         <Route path='/' element={<HomePage />} />
+        <Route path='/pin' element={<PinPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
       </Routes>

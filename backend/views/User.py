@@ -9,7 +9,7 @@ from src.database.Users import (
 from bson.objectid import ObjectId
 
 from src.utils.logger import error_logger, info_logger
-
+from src.database.Pins import get_pin
 from config import app
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import create_refresh_token, verify_jwt_in_request
@@ -51,3 +51,22 @@ class TestData(Resource):
         print(request.headers)
 
         return "ok"
+    
+
+# Verify pin
+class PinVerify(Resource):
+    def get(self):
+        print(request.args)
+        pin_id = request.args.get("id")
+        if pin_id is None:
+            return make_response("Write a 6 digit Pin", 400)
+        
+        pin_data = get_pin(pin_id)
+
+        if pin_data is None:
+            return make_response("Invalid Pin", 401)
+        
+        
+        return make_response(jsonify({
+            "status" : "success",
+        }), 200)

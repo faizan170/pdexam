@@ -12,6 +12,7 @@ from src.utils.logger import error_logger, info_logger
 import os
 from src.database.Reports import get_all_reports, delete_report_by_id, get_single_report
 from src.database.Users import get_all_users
+from src.database.Pins import get_all_pins, create_pin, get_all_pin_reports
 from config import app, s3Manager
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import create_refresh_token, verify_jwt_in_request
@@ -59,9 +60,14 @@ class Admin(Resource):
                 user['_id'] = str(user['_id'])
                 users.append(user)
 
+            pins = []
+            for pin in get_all_pin_reports():
+                pin['_id'] = str(pin['_id'])
+                pins.append(pin)
+            print(pins)
 
             return make_response(jsonify({
-                'reports' : reports, "users": users
+                'reports' : reports, "users": users, 'pins' : pins
             }), 200)
         except Exception as ex:
             print(ex)
@@ -90,3 +96,18 @@ class Admin(Resource):
         except Exception as ex:
             print(ex)
             return make_response(str(ex), 400)
+
+
+
+class PinsAPI(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+            print(data)
+            pin = create_pin(data.get("name", "Guest"))
+
+            if type(pin) == dict:
+                return make_response(jsonify(pin))
+            return make_response("Error generating pin", 400)
+        except Exception as ex:
+            return make_response(str(ex), 500)    

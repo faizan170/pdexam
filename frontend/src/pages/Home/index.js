@@ -10,7 +10,7 @@ import './styles.css'
 import AudioWaveImg from '../../assets/images/wave.png'
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-
+import PinIcon from '@mui/icons-material/Pin';
 export default function Home() {
     const user = useSelector(state => state.user)
     const dispatch = useDispatch()
@@ -71,6 +71,10 @@ export default function Home() {
                     <div style={{ marginBottom: '40px' }}>
                         <Button component={Link} to="/login" variant="outlined" startIcon={<LoginIcon />}>Login</Button>
                         <p style={{ margin: 2 }}>New/Existing user login now</p>
+                    </div>
+                    <div style={{ marginBottom: '40px' }}>
+                        <Button component={Link} to="/pin" variant="outlined" startIcon={<PinIcon />}>Pin</Button>
+                        <p style={{ margin: 2 }}>If you have a pin provided by admin</p>
                     </div>
                     <div>
                         <Button component={Link} to="/register" variant="outlined" startIcon={<LoginIcon />}>Sign Up</Button>

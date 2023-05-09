@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { handleLogin } from '../../redux/authentication'
 import { setUser } from '../../redux/user'
+import { setData } from '../../redux/pdexam'
 //import useJwt from '../../auth/jwt/useJwt'
 import { useDispatch } from 'react-redux';
 import { saveTokenToCookie } from '../../auth/utils'
@@ -24,7 +25,7 @@ import { API_URL } from '../../configs/endpoint';
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function PinPage() {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -32,37 +33,19 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    
     setIsLoading(true)
     setErrorMessage("")
 
-    axios.post(`${API_URL}/login`, { email: data.get('email'), password: data.get('password') })
+    axios.get(`${API_URL}/pin/verify?id=${data.get('pin_id')}`)
       .then(res => {
         setIsLoading(false)
         setErrorMessage('')
-        console.log(res.data)
-
-        const data = {
-          ...res.data.userData, accessToken: res.data.accessToken, refreshToken: res.data.refreshToken, tokenExpiresIn: res.data.tokenExpiresIn,
-          refreshExpiresIn: res.data.refreshExpiresIn, id: res.data.id
-        }
-
-        // Set to cookies
-        saveTokenToCookie(res.data.accessToken)
-
-        dispatch(handleLogin(data))
-        
-        dispatch(setUser({
-          id: res.data.id,
-          full_name: res.data.fullName,
-          username: res.data.username,
-          role: res.data.role
+        dispatch(setData({
+          key: 'pin_id', value: data.get('pin_id')
         }))
-        //ability.update(res.data.userData.ability)
-        navigate("/")
+        console.log(res)
+        navigate("/pd-exam")
 
       })
       .catch(err => {
@@ -71,8 +54,8 @@ export default function SignIn() {
         if (err.response === undefined) {
           setErrorMessage("Error processing request")
         } else {
-          if (err.response.status === 409) {
-            setErrorMessage(err.response.data.error)
+          if (err.response.status === 401 || err.response.status === 400) {
+            setErrorMessage(err.response.data)
           } else {
             setErrorMessage("Error processing request")
           }
@@ -96,34 +79,20 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Enter Pin
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="pin"
+              label="Your Pin"
+              name="pin_id"
               autoFocus
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-
+            
+            
 
             {
               errorMessage !== "" && <p style={{ color: 'red', marginBottom: 0, marginTop: 0 }}>{errorMessage}</p>
@@ -135,10 +104,9 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Start Exam
             </Button>
             <Grid container>
-              
               <Grid item>
                 <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}

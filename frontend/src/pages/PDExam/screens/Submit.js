@@ -19,8 +19,8 @@ export default function SubmitTest() {
     const dispatch = useDispatch()
 
     const [socket, setSocket] = useState(null)
-    const formData = useSelector(state => state.pdexam)
-    const { current_test_index, test_data, data } = formData
+    const formDataMain = useSelector(state => state.pdexam)
+    const { current_test_index, test_data, data } = formDataMain
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [dataPercentage, setDataPercentage] = useState(0)
     const [errorMessage, setErrorMessage] = useState("")
@@ -44,6 +44,7 @@ export default function SubmitTest() {
         formData.append('assist', data.assist)
         formData.append('medication', data.medication)
         formData.append('symptoms', data.symptoms)
+        formData.append('pin_id', formDataMain.pin_id)
 
         instance.post(`${API_URL}/pdexam`, formData, {
             onUploadProgress: (progressEvent) => {

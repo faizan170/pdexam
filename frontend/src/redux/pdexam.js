@@ -7,6 +7,7 @@ export const PDExam = createSlice({
   initialState: {
     screen: 'init', // init, test, submit
     current_test_index : 0,
+    pin_id: null,
     test_data: [
       { title: 'Arm at rest', id: 'arm_at_rest', type: 'arm' },
       { title: 'Outstretched Arm', id: 'outstretched_arm', type: 'arm' },
@@ -77,6 +78,9 @@ export const PDExam = createSlice({
     setCurrentIndex: (state, action) => {
         state.current_test_index = action.payload
     },
+    setData: (state, action) => {
+        state[action.payload.key] = action.payload.value
+    },
     setTestRecording: (state, action) => {
         console.log(action.payload)
         state.data.test[action.payload.id] = {
@@ -87,6 +91,6 @@ export const PDExam = createSlice({
   }
 }) 
 
-export const { setCurrentScreen, setFormData, setCurrentIndex, setTestRecording } = PDExam.actions
+export const { setCurrentScreen, setFormData, setCurrentIndex, setTestRecording, setData } = PDExam.actions
 
 export default PDExam.reducer

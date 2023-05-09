@@ -13,13 +13,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Reports from "./pages/Reports";
 import LoadingIcon from '../../assets/images/loading.gif'
 import UsersPage from "./pages/Users";
+import Pins from "./pages/Pins";
 
 export default function AdminPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [erroMessage, setErrorMessage] = useState("")
     const navigate = useNavigate()
     const [adminData, setAdminData] = useState({
-        users: [], reports: []
+        users: [], reports: [], pins: []
     })
 
     const get_reports_data = () => {
@@ -38,7 +39,6 @@ export default function AdminPage() {
 
     function onDelete(delete_id) {
         setAdminData({ ...adminData, reports: adminData.reports.filter(report => report._id !== delete_id) })
-
     }
 
     useEffect(() => {
@@ -69,8 +69,11 @@ export default function AdminPage() {
                         <Card style={{ marginTop: '20px' }}>
                             <CardHeader title={`Users (${adminData.users?.length})`} subheader='All registered Users List' />
                             <CardContent>
-                            <UsersPage data={adminData.users} />
+                                <UsersPage data={adminData.users} />
                             </CardContent>
+                        </Card>
+                        <Card style={{ marginTop: '20px' }}>
+                        <Pins data={adminData.pins} getdata={get_reports_data} />
                         </Card>
                     </div>
             }

@@ -41,8 +41,8 @@ export default function InitialScreen() {
                 <div className="pdexam-title">PDExam</div>
             </div>
             <div className="pdexam-body">
-                <p className="text-center">Please answers the following questions</p>
-                <div style={{ height: '100%', justifyContent: 'center', flexDirection: 'column', display: 'flex' }}>
+                <p className="text-center" style={{ paddingBottom: '10px' }}>Please answers the following questions</p>
+                <div style={{ justifyContent: 'center', flexDirection: 'column', display: 'flex' }}>
                     <div style={{ border: '1px solid #ccc', padding: '20px' }}>
                         <FormControl>
                             <FormLabel id="demo-radio-buttons-group-label">Is someone assisting you with performing this test?</FormLabel>
