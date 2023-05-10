@@ -183,6 +183,12 @@ export default function SubmitTest() {
                                         }} />
                                     </Tooltip>
                                 </div>
+
+                                <Button style={{ marginTop: '10px' }} 
+                                    component={Link} to="/"
+                                    variant="contained" color='primary'>
+                                    Back to Home
+                                </Button>
                             </div>
                         }
                         {
