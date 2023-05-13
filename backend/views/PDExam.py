@@ -9,6 +9,7 @@ from src.database.Users import (
 from bson.objectid import ObjectId
 
 from src.utils.logger import error_logger, info_logger
+from src.database.Configs import get_questions
 import os
 from src.database.Reports import create_report as add_new_report, get_all_reports_for_user, delete_report_by_id, get_single_report
 from config import app, s3Manager
@@ -99,6 +100,8 @@ class PDExam(Resource):
             audio_files = []
 
             all_spectograms = []
+            exam_ids = get_questions().get("test_data", [])
+            
             for ex_id, row in enumerate(exam_ids):
                 spectograms = {"left" : "", "right" : ""}
                 audio_file_s = {"left" : "", "right" : ""}
@@ -226,3 +229,11 @@ class PDExam(Resource):
         except Exception as ex:
             print(ex)
             return make_response(str(ex), 400)
+
+
+
+class PDExamConfigs(Resource):
+    def get(self):
+        doc = get_questions()
+
+        return doc

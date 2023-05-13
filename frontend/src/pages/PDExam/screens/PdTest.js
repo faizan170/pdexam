@@ -130,7 +130,7 @@ export default function PDTest() {
 
     return (
         <Container maxWidth="sm">
-            <LinearProgress variant="determinate" style={{ marginTop: '3px' }} value={(current_test_index/10)*100} />
+            <LinearProgress variant="determinate" style={{ marginTop: '3px' }} value={(current_test_index/formData.test_data.length)*100} />
             <div className="pdexam-header text-center">
                 <div className="pdexam-title">Test {current_test_index + 1} - {test_data[current_test_index].title}</div>
             </div>

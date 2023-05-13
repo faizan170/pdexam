@@ -87,10 +87,15 @@ export const PDExam = createSlice({
             ...state.data.test[action.payload.id],
             [action.payload.type] : action.payload.data
         }
+    },
+    setInitialData:(state, action) => {
+        console.log(action.payload)
+        state.test_data = action.payload.test_data
+        state.data = {...state.data, test: action.payload.data}
     }
   }
 }) 
 
-export const { setCurrentScreen, setFormData, setCurrentIndex, setTestRecording, setData } = PDExam.actions
+export const { setCurrentScreen, setFormData, setCurrentIndex, setTestRecording, setData, setInitialData } = PDExam.actions
 
 export default PDExam.reducer
