@@ -41,13 +41,20 @@ def create_report(report_data):
 
 
     # Basic report data
-    table = doc.add_table(rows=6, cols=2, style="Table Grid")
-    for i, key in enumerate(['User Code', 'Date', 'Time', 'Test Performace', 'Medication Status', "Patient's rating of symptoms severity"]):
+    table = doc.add_table(rows=3, cols=2, style="Table Grid")
+    for i, key in enumerate(['User Code', 'Date', 'Time']):
     
         cell = table.rows[i].cells
         set_cell_margins(cell[0], top=100, start=100, bottom=100, end=50)
         cell[0].text = key
         cell[1].text = report_data['fields'].get(key)
+
+    for field_data in report_data['fields']['questions']:
+        row = table.add_row()
+        cell = row.cells
+        set_cell_margins(cell[0], top=100, start=100, bottom=100, end=50)
+        cell[0].text = field_data['title']
+        cell[1].text = field_data['value']
 
     doc.add_paragraph('')
     

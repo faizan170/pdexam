@@ -10,31 +10,25 @@ import FormLabel from '@mui/material/FormLabel';
 import { setFormData, setCurrentScreen } from "../../../redux/pdexam";
 import Slider from '@mui/material/Slider';
 import './initialScreen.css'
+import RadioComp from "./FormComponents/RadioComp";
+import RangeComp from "./FormComponents/RangeComp";
 
 export default function InitialScreen() {
     const dispatch = useDispatch()
-    const formData = useSelector(state => state.pdexam).data
+    const pdExamForm = useSelector(state => state.pdexam)
+    const formData = pdExamForm.data
+    const questions = pdExamForm.questions
     const onChangeRadio = (e) => {
         dispatch(setFormData({ key: e.target.name, value: e.target.value }))
     }
-    function valuetext(value) {
-        return `${value}°C`;
-      }
+    
+    const renderQuestion = (question, q_index) => {
+        if (question.type === 'radio')
+            return <RadioComp question={question} onChangeRadio={onChangeRadio} key={`question-${q_index}`} index={q_index} />
+        else
+            return <RangeComp question={question} onChangeRadio={onChangeRadio} key={`question-${q_index}`} index={q_index} />
+    }
 
-      const marks = [
-        {value: 0, label: '0'},
-        {value: 1, label: '1'},
-        {value: 2, label: '2'},
-        {value: 3, label: '3'},
-        {value: 4, label: '4'},
-        {value: 5, label: '5'},
-        {value: 6, label: '6'},
-        {value: 7, label: '7'},
-        {value: 8, label: '8'},
-        {value: 9, label: '9'},
-        {value: 10, label: '10'},
-        
-      ];
     return (
         <Container maxWidth="sm">
             <div className="pdexam-header text-center">
@@ -44,7 +38,7 @@ export default function InitialScreen() {
                 <p className="text-center" style={{ paddingBottom: '10px' }}>Please answers the following questions</p>
                 <div style={{ justifyContent: 'center', flexDirection: 'column', display: 'flex' }}>
                     <div style={{ border: '1px solid #ccc', padding: '20px' }}>
-                        <FormControl>
+                        {/* <FormControl>
                             <FormLabel id="demo-radio-buttons-group-label">Is someone assisting you with performing this test?</FormLabel>
                             <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
@@ -86,7 +80,14 @@ export default function InitialScreen() {
                                 min={0}
                                 max={10}
                             />
-                        </FormControl>
+                        </FormControl> */}
+                        {
+                            questions.map((question, q_index) => {
+                                return (
+                                   <div key={`qq-${q_index}`}> {renderQuestion(question, q_index)}</div>
+                                )
+                            })
+                        }
                     </div>
                 </div>
             </div>

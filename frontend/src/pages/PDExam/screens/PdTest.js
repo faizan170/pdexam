@@ -16,6 +16,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 export default function PDTest() {
     const dispatch = useDispatch()
     const formData = useSelector(state => state.pdexam)
+    
     const { current_test_index, test_data, data } = formData
     const test_recordings = data.test[test_data[current_test_index].id]
     const recorderControls = useAudioRecorder();

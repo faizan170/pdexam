@@ -20,10 +20,11 @@ export const PDExam = createSlice({
       { title: 'Heel Tapping', id: 'heel_tapping', type: 'leg' },
       { title: 'Knee Flexion', id: 'knee_flexion', type: 'leg' },
     ],
+    questions: [
+        
+    ],
+    tutorial: "https://www.youtube.com/embed/a9__D53WsUs",
     data: {
-        assist: '',
-        medication: '',
-        symptoms: 0,
         test: {
             arm_at_rest: {
                 left: null,
@@ -89,9 +90,10 @@ export const PDExam = createSlice({
         }
     },
     setInitialData:(state, action) => {
-        console.log(action.payload)
         state.test_data = action.payload.test_data
         state.data = {...state.data, test: action.payload.data}
+        state.questions = action.payload.questions
+        state.tutorial = action.payload.tutorial
     }
   }
 }) 

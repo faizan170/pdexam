@@ -27,6 +27,7 @@ export default function SubmitTest() {
     const [socketResp, setSocketResp] = useState("")
     const [respUrl, setRespUrl] = useState("")
 
+   
     const onSubmitClick = () => {
         var formData = new FormData()
         setSocketResp('Uploading Data')
@@ -41,9 +42,13 @@ export default function SubmitTest() {
                 formData.append(`${test_id}-right`, data.test[test_id].right)
             }
         }
-        formData.append('assist', data.assist)
-        formData.append('medication', data.medication)
-        formData.append('symptoms', data.symptoms)
+        formDataMain.questions.map((item, index) => {
+            //final.push({[item.id]: formDataMain.data[item.id]})
+            formData.append(item.id, formDataMain.data[item.id])
+        })
+        // formData.append('assist', data.assist)
+        // formData.append('medication', data.medication)
+        // formData.append('symptoms', data.symptoms)
         formData.append('pin_id', formDataMain.pin_id)
 
         instance.post(`${API_URL}/pdexam`, formData, {
@@ -67,6 +72,8 @@ export default function SubmitTest() {
             console.log(err.resp)
             if (err.response?.status === 400) {
                 setErrorMessage(err.response.data)
+            }else{
+                setErrorMessage("Error Creating report")
             }
             setIsSubmitting(false)
         })

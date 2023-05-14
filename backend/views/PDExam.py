@@ -86,13 +86,25 @@ class PDExam(Resource):
         if 1==1:
             st = time.time()
             form_data = dict(request.form)
+            all_questions_data = get_questions()
+            exam_ids = all_questions_data.get("test_data", [])
+
+            questions_form_data = []
+            for question in all_questions_data.get("questions", []):
+                questions_form_data.append({
+                    "value" : form_data.get(question['id'], ""), "title" : question.get("report_title")
+                })
+
+
+
             fileds_data = {
                 'User Code' : identity, 
                 'Date' : datetime.now().strftime("%d %B %Y"), 
                 'Time' : datetime.now().strftime("%H:%M:%S"), 
-                'Test Performace' : test_performance.get(form_data.get("assist", ""), ""), 
-                'Medication Status' : medication_status.get(form_data.get("medication", ""), ""), 
-                "Patient's rating of symptoms severity" : form_data.get("symptoms", "")
+                # 'Test Performace' : test_performance.get(form_data.get("assist", ""), ""), 
+                # 'Medication Status' : medication_status.get(form_data.get("medication", ""), ""), 
+                # "Patient's rating of symptoms severity" : form_data.get("symptoms", "")
+                "questions" : questions_form_data
             }
 
             
@@ -100,7 +112,6 @@ class PDExam(Resource):
             audio_files = []
 
             all_spectograms = []
-            exam_ids = get_questions().get("test_data", [])
             
             for ex_id, row in enumerate(exam_ids):
                 spectograms = {"left" : "", "right" : ""}

@@ -14,15 +14,22 @@ def get_questions():
     """
     try:
 
-        doc = pins_col.find_one({"type" : "questions"})
+        doc = pins_col.find_one({"type" : "config"})
         
         ids_with_data = {}
         for row in doc['tests']:
             ids_with_data[row['id']] = {'left' : None, 'right' : None}
 
+        questions = []
+        for q in doc['questions']:
+            if q['type'] == 'range':
+                q['marks'] = [{'value' : i, 'label' : str(i)} for i in range(q['min'], q['max'] + 1)]
+                
+            questions.append(q)
+
         del doc["_id"]
         return {
-            "test_data" : doc['tests'], 'data' : ids_with_data
+            "test_data" : doc['tests'], 'data' : ids_with_data, "questions" : questions, "tutorial" : doc.get("tutorial")
         }
 
     except Exception as err:

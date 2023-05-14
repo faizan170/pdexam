@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Container } from '@mui/material'
+import {  Container } from '@mui/material'
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { isUserLoggedIn } from "../../auth/utils";
-import { API_URL } from "../../configs/endpoint";
-import { handleLogout } from "../../redux/authentication";
+
 import './styles.css'
 import { setInitialData } from "../../redux/pdexam";
 import InitialScreen from "./screens/initialScreen";
@@ -40,17 +38,28 @@ export default function PDExam() {
         navigate("/login")
     })
 
-
+    const [apiLoading, setApiLoading] = useState(true)
     useEffect(() => {
+        setApiLoading(true)
         instance.get("/configs").then(res => {
             dispatch(setInitialData(res.data))
+            setApiLoading(false)
         }).catch(err => {
             console.log(err)
+            setApiLoading(false)
         })
       }, [])
 
     if(loading) {
         return <div></div>
+    }
+
+    if (apiLoading) {
+        return <div style={{
+            justifyContent: 'center', display: 'flex', flexDirection: 'column', height: '100vh'
+        }}>
+            <div style={{ textAlign: 'center' }}>Loading</div>
+        </div>
     }
 
     return (
